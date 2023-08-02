@@ -1,0 +1,131 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christ Tac Toe</title>
+    <link rel="stylesheet" href="Tic1.css">
+</head>
+<body>
+    <h1>Christ Tac Toe</h1>
+    <div id="gameBoard">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+    <p id="status"></p>
+
+    <script src="Tic1.js"></script>
+</body>
+</html>
+
+CSS
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 2px;
+    margin-top: 20px;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    cursor: pointer;
+    border: 1px solid #333;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+JS
+
+const cells = document.getElementsByClassName('cell');
+const status = document.getElementById('status');
+
+let currentPlayer = 'X';
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
+let gameActive = true;
+
+function checkWinner() {
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+            gameActive = false;
+            return gameBoard[a];
+        }
+    }
+
+    if (!gameBoard.includes('')) {
+        gameActive = false;
+        return 'T';
+    }
+
+    return null;
+}
+
+function updateStatus() {
+    const winner = checkWinner();
+    if (winner) {
+        if (winner === 'T') {
+            status.innerText = "It's a Tie!";
+        } else {
+            status.innerText = `Player ${winner} wins!`;
+        }
+    } else {
+        status.innerText = `Player ${currentPlayer}'s turn`;
+    }
+}
+
+function makeMove(index) {
+    if (!gameActive || gameBoard[index] !== '') {
+        return;
+    }
+
+    gameBoard[index] = currentPlayer;
+    cells[index].innerText = currentPlayer;
+
+    const winner = checkWinner();
+    if (winner) {
+        gameActive = false;
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+
+    updateStatus();
+}
+
+for (let i = 0; i < cells.length; i++) {
+    cells[i].addEventListener('click', () => makeMove(i));
+}
+
+updateStatus();
+
