@@ -1,7 +1,7 @@
 # First...Game
 
-Created this before sophmore year, and yes I was self taught.
-I promise I'm a ton better. This is also a guessing game
+Created these before sophmore year, and yes I was self taught.
+I promise I'm a ton better.
 
 Html code
 
